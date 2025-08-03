@@ -1,16 +1,19 @@
-# 🐍 pyxend
+# pyxend
 <p align="center">
   <img src="https://img.shields.io/pypi/v/pyxend" alt="PyPI Version">
   <img src="https://img.shields.io/pypi/l/pyxend" alt="License">
   <img src="https://img.shields.io/pypi/pyversions/pyxend" alt="Python Versions">
   <img src="https://img.shields.io/github/last-commit/codeFlane/pyxend" alt="Last Commit">
   <img src="https://img.shields.io/github/stars/codeFlane/pyxend?style=social" alt="GitHub Stars">
+  <img src="https://img.shields.io/badge/VSC-Compatible-blueviolet" alt="VS Code Compatible">
+  <img src="https://img.shields.io/badge/Language-Python-blue" alt="Written in Python">
 </p>
+pyxend is a Pytho
 pyxend is a Python-based framework and CLI tool for building Visual Studio Code extensions entirely in Python. It allows developers to define extension commands using simple Python decorators and handle VS Code actions like modifying editor content, showing modals, and running terminal commands.
 
 > ⚡️ No JavaScript required for extension logic — write VS Code extensions in pure Python.
 
-![Preview](preview.gif)
+![Preview](https://raw.githubusercontent.com/codeFlane/pyxend/main/preview.gif)
 ---
 
 ## ✨ Features
@@ -26,6 +29,10 @@ pyxend is a Python-based framework and CLI tool for building Visual Studio Code 
 ## 📦 Installation
 
 ```bash
+pip install pyxend
+```
+Or using git repository:
+```bash
 git clone https://github.com/codeflane/pyxend
 cd pyxend
 pip install -e .
@@ -36,17 +43,12 @@ npm install -g vsce
 ```
 
 ## 🚀 Getting Started
-#### 1. Create a new extension
+### 1. Create a new extension
 ```bash
 pyxend init "My Extension Name" myextension
 ```
-This generates a minimal VS Code extension with:
 
- - extension.js
- - package.json
- - .vscodeignore
-
-#### 2. Add logic in Python
+### 2. Add logic in Python
 
 Edit main.py:
 ```python
@@ -61,33 +63,78 @@ def say_hello(ctx):
 ext.run()
 ```
 
-#### 3. Sync the metadata
+### 3. Sync the metadata
 ```bash
 pyxend sync
 ```
-This will:
- - Regenerate extension.js
- - Update package.json commands and activation events
 
-#### 4. Build and install the extension
+### 4. Build and install the extension
 ```bash
 pyxend build
 code --install-extension your-extension.vsix
 ```
 
+## 📚 CLI Options
+All CLI commands accept a `--target` (or `-t`) option to specify the working directory (defaults to current folder).
+
+### Init
+```bash
+pyxend init "Display Name" extension_name
+```
+Init new project.
+
+#### Arguments:
+ - **Display Name:** extension display name (that showing in extension hub)
+ - **Extension Name:** extension name (defaults to display name)
+
+#### Creates:
+ - `main.py` (logic)
+ - `extension.js` (bridge)
+ - `package.json` (extension metadata)
+ - `.vscodeignore`
+
+### Sync
+```bash
+pyxend sync
+```
+Sync Python decorators in main.py with `extension.js` and `package.json`
+
+### Manifest
+```bash
+pyxend manifest -v 0.0.1 -e 1.70.0 -d desc -t title -n name -g git
+```
+Update package.json metadata
+
+#### Options:
+| Option              | Description                   |
+| ------------------- | ----------------------------- |
+| `--engine / -e`      | VS Code engine version        |
+| `--description / -d` | Description of your extension |
+| `--git / -g`         | GitHub repo URL               |
+| `--name / -n`        | Display name                  |
+| `--version / -v`     | Extension version             |
+
+### License
+```bash
+pyxend license author
+```
+Create LICENSE file (now only MIT support).
+License is required for creating extensions
+
+
 ## 🧩 Extension API
 The core API is exposed via the `Extension` class.
 
-#### `ext.command(name: str, title: Optional[str] = None)`
+### Command decorator
 
 Decorator to register a command that can be invoked from VS Code.
 
-##### Arguments:
+#### Arguments:
 
 * `name` – The command name (e.g., `"sayHello"`).
-* `title` – Optional title to display in the Command Palette.
+* `title` – Title to display in the Command Palette. Defaults to `name`
 
-##### Context:
+#### Context:
 
 When the command is invoked, it receives a `context` dictionary with useful metadata:
 
@@ -101,7 +148,7 @@ When the command is invoked, it receives a `context` dictionary with useful meta
 }
 ```
 
-##### Example:
+#### Example:
 
 ```python
 @ext.command("sayHello", title="Say Hello")
@@ -110,129 +157,106 @@ def say_hello(context):
 ```
 
 ---
-#### `ext.show_modal(message: str, type: ModalType = ModalType.INFO)`
+### Show modal
 Show modal popup
-##### Arguments:
+
+#### Arguments:
  - message – The message to display.
  - type – Must be one of the ModalType values:
    - ModalType.INFO
    - ModalType.WARNING
    - ModalType.ERROR
 
-##### Make sure to import ModalType:
+#### Make sure to import ModalType:
 ```python
 from pyxend import ModalType
 ```
-##### Example:
+#### Example:
 ```python
 ext.show_modal("This is an error", type=ModalType.error) #Show error modal with text "This is an error"
 ```
 
 ---
-#### `ext.replace_selected_text(text: str)`
-
+### Replace selected text
 Replace the currently selected text in the editor.
 
-##### Arguments:
-
+#### Arguments:
 * `text` – The text that will replace the current selection.
 
-##### Example:
-
+#### Example:
 ```python
 ext.replace_selected_text("Replaced content.") #Replace currently selected text to "Replace content."
 ```
 
 ---
-#### `ext.insert_text(text: str)`
-
+### Insert test
 Insert text at the current cursor position.
 
-##### Arguments:
-
+#### Arguments:
 * `text` – The text to insert.
 
-##### Example:
-
+#### Example:
 ```python
 ext.insert_text("Inserted text.") #Insert text "Inserted text." after cursor position
 ```
 
 ---
-#### `ext.open_file(path: str)`
-
+### Open file
 Open a file in the editor by its path.
 
-##### Arguments:
-
+#### Arguments:
 * `path` – Full path to the file.
 
-##### Example:
-
+#### Example:
 ```python
 ext.open_file("D:/projects/example.py") #open "D:/projects/example.py" in editor
 ```
 
 ---
-#### `ext.set_cursor_pos(line: int, character: int)`
-
+### Set cursor position
 Move the editor’s cursor to the specified position.
 
-##### Arguments:
-
+#### Arguments:
 * `line` – Line number.
 * `character` – Character number.
 
-##### Example:
-
+#### Example:
 ```python
 ext.set_cursor_pos(5, 10) #move cursor to line 5, character 10
 ```
 
 ---
-#### `ext.save_file()`
-
+### Save file
 Save the current file.
 
-##### Example:
-
+#### Example:
 ```python
 ext.save_file() #save current file
 ```
 
 ---
-#### `ext.replace_text(text: str)`
-
+### Replace all text
 Replace the entire content of the file.
 
-##### Arguments:
-
+#### Arguments:
 * `text` – The new content for the whole file.
 
-##### Example:
-
+#### Example:
 ```python
 ext.replace_text("print('Hello, World!')\n") #replace all file text to "print('Hello, World!')"
 ```
 
 ---
-#### `ext.run_terminal_command(command: str, name: str = 'pyxend terminal')`
+### Run terminal command
 
+`ext.run_terminal_command(command: str, name: str = 'pyxend terminal')`
 Execute a command in a new or existing terminal.
 
-##### Arguments:
-
+#### Arguments:
 * `command` – The terminal command to execute.
 * `name` (optional) – Name of the terminal instance. Default is "pyxend terminal"
 
-##### Example:
-
+#### Example:
 ```python
 ext.run_terminal_command("echo 'Hello World'") #create new terminal and echo "Hello World"
 ```
-
----
-
-## 🤝 Contributing
-
-Pull requests welcome! Open issues or ideas on GitHub.

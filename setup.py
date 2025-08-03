@@ -12,5 +12,6 @@ setup(
         'console_scripts': [
             'pyxend=pyxend.cli:cli'
         ]
-    }
+    },
+    python_requires=">=3.8"
 )

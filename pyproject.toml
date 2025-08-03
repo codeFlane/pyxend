@@ -10,7 +10,7 @@ readme = "README.md"
 authors = [
   { name = "codeflane", email = "nta16022013@gmail.com" }
 ]
-license = "LICENSE"
+license = "MIT"
 dependencies = [
   "click",
   "jinja2"
