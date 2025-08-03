@@ -125,7 +125,7 @@ def build(target):
     if result.returncode == 0:
         match = next((line for line in result.stdout.splitlines() if "Packaged:" in line), None)
         if match:
-            filename = match.split("Packaged:")[-1].strip()
+            filename = match.split("Packaged:")[-1].split('(')[0].strip()
             print(f'Build completed. Install package using "code --install-extension {filename}"')
         else:
             print("Build succeeded but could not find .vsix output.")

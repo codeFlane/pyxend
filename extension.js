@@ -152,11 +152,67 @@ function activate(context) {
   };
 
   context.subscriptions.push(
-    {% for command in commands %}
-    vscode.commands.registerCommand("{{ extension_name }}.{{ command }}", () => {
-      runPythonCommand('{{ command }}');
+    
+    vscode.commands.registerCommand("pyxendtest.get_selected_text", () => {
+      runPythonCommand('get_selected_text');
     }),
-    {% endfor %}
+    
+    vscode.commands.registerCommand("pyxendtest.get_cursor_pos", () => {
+      runPythonCommand('get_cursor_pos');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.get_language", () => {
+      runPythonCommand('get_language');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.get_file_path", () => {
+      runPythonCommand('get_file_path');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.get_all_text", () => {
+      runPythonCommand('get_all_text');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.show_info_modal", () => {
+      runPythonCommand('show_info_modal');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.show_warn_modal", () => {
+      runPythonCommand('show_warn_modal');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.show_error_modal", () => {
+      runPythonCommand('show_error_modal');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.replace_selected_text", () => {
+      runPythonCommand('replace_selected_text');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.insert_text", () => {
+      runPythonCommand('insert_text');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.open_file", () => {
+      runPythonCommand('open_file');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.set_cursor_pos", () => {
+      runPythonCommand('set_cursor_pos');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.save_file", () => {
+      runPythonCommand('save_file');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.replace_all_text", () => {
+      runPythonCommand('replace_all_text');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.run_terminal_command", () => {
+      runPythonCommand('run_terminal_command');
+    }),
+    
   );
 }
 

@@ -105,7 +105,7 @@ class Extension:
         ### Args:
             **text (str):** text to replace
         """
-        self.actions.append({"action": "replace_text", "text": text})
+        self.actions.append({"action": "overwrite_file", "text": text})
 
     def run_terminal_command(self, command: str, name: str = 'pyxend terminal') -> None:
         """Run terminal command (create terminal, show it, execute command)

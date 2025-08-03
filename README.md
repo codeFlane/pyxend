@@ -189,7 +189,7 @@ ext.replace_selected_text("Replaced content.") #Replace currently selected text 
 ```
 
 ---
-### Insert test
+### Insert text
 Insert text at the current cursor position.
 
 #### Arguments:
