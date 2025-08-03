@@ -1,15 +1,16 @@
-# 🐍 pyVScode
+# 🐍 pyxend
 <p align="center">
-  <img src="https://img.shields.io/pypi/v/pyvscode" alt="PyPI Version">
-  <img src="https://img.shields.io/pypi/l/pyvscode" alt="License">
-  <img src="https://img.shields.io/pypi/pyversions/pyvscode" alt="Python Versions">
-  <img src="https://img.shields.io/github/last-commit/codeFlane/pyVScode" alt="Last Commit">
-  <img src="https://img.shields.io/github/stars/codeFlane/pyVScode?style=social" alt="GitHub Stars">
+  <img src="https://img.shields.io/pypi/v/pyxend" alt="PyPI Version">
+  <img src="https://img.shields.io/pypi/l/pyxend" alt="License">
+  <img src="https://img.shields.io/pypi/pyversions/pyxend" alt="Python Versions">
+  <img src="https://img.shields.io/github/last-commit/codeFlane/pyxend" alt="Last Commit">
+  <img src="https://img.shields.io/github/stars/codeFlane/pyxend?style=social" alt="GitHub Stars">
 </p>
-**pyVScode** is a Python-based framework and CLI tool for building Visual Studio Code extensions entirely in Python. It allows developers to define extension commands using simple Python decorators and handle VS Code actions like modifying editor content, showing modals, and running terminal commands.
+pyxend is a Python-based framework and CLI tool for building Visual Studio Code extensions entirely in Python. It allows developers to define extension commands using simple Python decorators and handle VS Code actions like modifying editor content, showing modals, and running terminal commands.
 
 > ⚡️ No JavaScript required for extension logic — write VS Code extensions in pure Python.
 
+![Preview](preview.gif)
 ---
 
 ## ✨ Features
@@ -25,8 +26,8 @@
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/yourname/pyvscode
-cd pyvscode
+git clone https://github.com/codeflane/pyxend
+cd pyxend
 pip install -e .
 ```
 Make sure Node.js and vsce are installed:
@@ -37,7 +38,7 @@ npm install -g vsce
 ## 🚀 Getting Started
 #### 1. Create a new extension
 ```bash
-pyvscode init "My Extension Name" myextension
+pyxend init "My Extension Name" myextension
 ```
 This generates a minimal VS Code extension with:
 
@@ -49,7 +50,7 @@ This generates a minimal VS Code extension with:
 
 Edit main.py:
 ```python
-from pyvscode import Extension, ModalType
+from pyxend import Extension, ModalType
 
 ext = Extension()
 
@@ -62,7 +63,7 @@ ext.run()
 
 #### 3. Sync the metadata
 ```bash
-pyvscode sync
+pyxend sync
 ```
 This will:
  - Regenerate extension.js
@@ -70,7 +71,7 @@ This will:
 
 #### 4. Build and install the extension
 ```bash
-pyvscode build
+pyxend build
 code --install-extension your-extension.vsix
 ```
 
@@ -120,7 +121,7 @@ Show modal popup
 
 ##### Make sure to import ModalType:
 ```python
-from pyvscode import ModalType
+from pyxend import ModalType
 ```
 ##### Example:
 ```python
@@ -215,14 +216,14 @@ ext.replace_text("print('Hello, World!')\n") #replace all file text to "print('H
 ```
 
 ---
-#### `ext.run_terminal_command(command: str, name: str = 'pyVScode terminal')`
+#### `ext.run_terminal_command(command: str, name: str = 'pyxend terminal')`
 
 Execute a command in a new or existing terminal.
 
 ##### Arguments:
 
 * `command` – The terminal command to execute.
-* `name` (optional) – Name of the terminal instance. Default is "pyVScode terminal"
+* `name` (optional) – Name of the terminal instance. Default is "pyxend terminal"
 
 ##### Example:
 

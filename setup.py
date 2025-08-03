@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='pyvscode',
+    name='pyxend',
     version='0.1.0',
     packages=find_packages(),
     install_requires=[
@@ -10,7 +10,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'pyvscode=pyvscode.cli:cli'
+            'pyxend=pyxend.cli:cli'
         ]
     }
 )
