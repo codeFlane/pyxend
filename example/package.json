@@ -1,0 +1,55 @@
+{
+  "name": "pyxend-test",
+  "displayName": "pyxend-test",
+  "version": "0.1.2",
+  "main": "extension.js",
+  "activationEvents": [
+    "onCommand:pyxendtest.show_context",
+    "onCommand:pyxendtest.replace_selection",
+    "onCommand:pyxendtest.insert_here",
+    "onCommand:pyxendtest.open_this_file",
+    "onCommand:pyxendtest.move_cursor",
+    "onCommand:pyxendtest.save_now",
+    "onCommand:pyxendtest.overwrite_file",
+    "onCommand:pyxendtest.terminal_demo"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "pyxendtest.show_context",
+        "title": "Show context data"
+      },
+      {
+        "command": "pyxendtest.replace_selection",
+        "title": "Replace selected text"
+      },
+      {
+        "command": "pyxendtest.insert_here",
+        "title": "Insert text after cursor"
+      },
+      {
+        "command": "pyxendtest.open_this_file",
+        "title": "Reopen same file"
+      },
+      {
+        "command": "pyxendtest.move_cursor",
+        "title": "Move cursor to line 0 char 0"
+      },
+      {
+        "command": "pyxendtest.save_now",
+        "title": "Save current file"
+      },
+      {
+        "command": "pyxendtest.overwrite_file",
+        "title": "Overwrite whole file"
+      },
+      {
+        "command": "pyxendtest.terminal_demo",
+        "title": "Run echo in terminal"
+      }
+    ]
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}

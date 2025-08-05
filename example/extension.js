@@ -158,11 +158,39 @@ function activate(context) {
   };
 
   context.subscriptions.push(
-    {% for command in commands %}
-    vscode.commands.registerCommand("{{ extension_name }}.{{ command }}", () => {
-      runPythonCommand('{{ command }}');
+    
+    vscode.commands.registerCommand("pyxendtest.show_context", () => {
+      runPythonCommand('show_context');
     }),
-    {% endfor %}
+    
+    vscode.commands.registerCommand("pyxendtest.replace_selection", () => {
+      runPythonCommand('replace_selection');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.insert_here", () => {
+      runPythonCommand('insert_here');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.open_this_file", () => {
+      runPythonCommand('open_this_file');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.move_cursor", () => {
+      runPythonCommand('move_cursor');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.save_now", () => {
+      runPythonCommand('save_now');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.overwrite_file", () => {
+      runPythonCommand('overwrite_file');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.terminal_demo", () => {
+      runPythonCommand('terminal_demo');
+    }),
+    
   );
 }
 

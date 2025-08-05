@@ -77,8 +77,8 @@ def sync(target):
 @click.option('-g', '--git', help='Add git repository')
 @click.option('-n', '--name', help='Display name for extension')
 @click.option('-v', '--version', help='Extension version')
-def manifest(target, engine, description, git, name, version):
-    """update manifest (package.json) data, e.g. add description"""
+def metadata(target, engine, description, git, name, version):
+    """update metadata (package.json) data, e.g. add description"""
     print('Updating package.json...')
     project_dir = Path(target).resolve()
     with open(project_dir / 'package.json', 'r') as fl:

@@ -2,14 +2,13 @@
 <p align="center">
   <img src="https://img.shields.io/pypi/v/pyxend" alt="PyPI Version">
   <img src="https://img.shields.io/pypi/l/pyxend" alt="License">
-  <img src="https://img.shields.io/pypi/pyversions/pyxend" alt="Python Versions">
   <img src="https://img.shields.io/github/last-commit/codeFlane/pyxend" alt="Last Commit">
   <img src="https://img.shields.io/github/stars/codeFlane/pyxend?style=social" alt="GitHub Stars">
   <img src="https://img.shields.io/badge/VSC-Compatible-blueviolet" alt="VS Code Compatible">
   <img src="https://img.shields.io/badge/Language-Python-blue" alt="Written in Python">
+  <img src="https://static.pepy.tech/badge/pyxend" alt="Downloads">
 </p>
-pyxend is a Pytho
-pyxend is a Python-based framework and CLI tool for building Visual Studio Code extensions entirely in Python. It allows developers to define extension commands using simple Python decorators and handle VS Code actions like modifying editor content, showing modals, and running terminal commands.
+pyxend is a Python-based framework and CLI tool for building Visual Studio Code extensions entirely in Python. It allows to define VS code extension commands using simple Python decorators and handle VS Code actions like modifying editor content, showing modals, and running terminal commands.
 
 > ⚡️ No JavaScript required for extension logic — write VS Code extensions in pure Python.
 
@@ -99,15 +98,15 @@ pyxend sync
 ```
 Sync Python decorators in main.py with `extension.js` and `package.json`
 
-### Manifest
+### Metadata
 ```bash
-pyxend manifest -v 0.0.1 -e 1.70.0 -d desc -t title -n name -g git
+pyxend metadata -v 0.0.1 -e 1.70.0 -d desc -t title -n name -g git
 ```
 Update package.json metadata
 
 #### Options:
-| Option              | Description                   |
-| ------------------- | ----------------------------- |
+| Option               | Description                   |
+|----------------------| ------------------------------|
 | `--engine / -e`      | VS Code engine version        |
 | `--description / -d` | Description of your extension |
 | `--git / -g`         | GitHub repo URL               |
@@ -140,11 +139,14 @@ When the command is invoked, it receives a `context` dictionary with useful meta
 
 ```json
 {
-  "selected_text": "Hello",
-  "language": "python",
-  "cursor_pos": {"line": 3, "character": 15},
-  "file_path": "D:/projects/example.py",
-  "all_text": "Hello World"
+  "selected_text": "Hello", // Currently selected text
+  "language": "python", // Opened file language
+  "cursor_pos": {"line": 3, "character": 15}, // CUrrent cursor position
+  "file_path": "D:/projects/example.py", // Opened file path
+  "all_text": "Hello World", // File content
+  "cursor_word": "Hello", // the word under the cursor
+  "lines": 3, // Lines count in file
+  "file_size": 12 // File size in bytes
 }
 ```
 
@@ -260,3 +262,12 @@ Execute a command in a new or existing terminal.
 ```python
 ext.run_terminal_command("echo 'Hello World'") #create new terminal and echo "Hello World"
 ```
+
+## 📄 Changelog
+See ful change log in [CHANGELOG.md](./CHANGELOG.md)
+
+### Latest (0.1.2)
+Added 3 new values in context, renamed `manifest` → `metadata`
+
+### Previous (0.1.1)
+Fixed packaging bug, improved error modals, typo fixes

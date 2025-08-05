@@ -41,7 +41,8 @@ class Extension:
         def get_context(context):
             print(context)
         ```
-        -> `{'selected_text': 'hello', 'language': 'text', 'cursor_pos': {'line': 1, 'character': 4}, 'file_path': 'D:\test.txt', 'all_text': 'Hello, world'}`
+        -> `{'selected_text': 'hello', 'language': 'text', 'cursor_pos': {'line': 1, 'character': 4}, 'file_path': ...}`
+        You can see full documentation about context in README.md (pyxend -> Extension API -> Command decorator -> Context)
         """
         def decorator(fn):
             """Decorator for command"""

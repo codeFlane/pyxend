@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyxend"
-version = "0.1.1"
+version = "0.1.2"
 description = "Python framework for building VS Code extensions"
 readme = "README.md"
 authors = [
