@@ -22,6 +22,10 @@ function activate(context) {
     const cursorWord = document.getText(document.getWordRangeAtPosition(editor.selection.active)) || "";
     const lines = document.lineCount || 0;
     const fileSize = Buffer.byteLength(fullText, "utf-8");
+    const workspaceFolders = vscode.workspace.workspaceFolders || [];
+    const openedFiles = vscode.workspace.textDocuments.map(doc => doc.uri.fsPath);
+    const isSaved = !document.isDirty;
+    const workspace = workspaceFolders.length > 0 ? workspaceFolders[0].uri.fsPath : "";
 
     const contextPayload = {
       selected_text: selectedText,
@@ -31,7 +35,10 @@ function activate(context) {
       cursor_pos: cursorPos,
       cursor_word: cursorWord,
       lines,
-      file_size: fileSize
+      file_size: fileSize,
+      opened_files: openedFiles,
+      is_saved: isSaved,
+      workspace
     };
 
     const scriptPath = path.join(__dirname, "main.py");
@@ -71,23 +78,13 @@ function activate(context) {
           break;
 
         case "replace_selected_text":
+          vscode.window.showWarningMessage("[pyxend] Action 'replace_selected_text' is deprecated and will be removed in 1.0.0. Use 'replace_text' with preset 'selected' instead.");
           if (!editor || !selection) {
             vscode.window.showErrorMessage("[pyxend] Cannot replace text: no selection or editor.");
             return;
           }
           editor.edit(editBuilder => {
             editBuilder.replace(selection, action.text || "");
-          });
-          break;
-
-        case "insert_text":
-          if (!editor) {
-            vscode.window.showErrorMessage("[pyxend] Cannot insert text: no editor.");
-            return;
-          }
-          const pos = editor.selection.active;
-          editor.edit(editBuilder => {
-            editBuilder.insert(pos, action.text || "");
           });
           break;
 
@@ -136,8 +133,8 @@ function activate(context) {
           terminal.show();
           terminal.sendText(action.command);
           break;
-
         case "overwrite_file":
+          vscode.window.showWarningMessage("[pyxend] Action 'overwrite_file' is deprecated and will be removed in 1.0.0. Use 'replace_text' with preset 'all' instead.");
           if (!editor || !document) {
             vscode.window.showErrorMessage("[pyxend] Cannot overwrite file: editor or document missing.");
             return;
@@ -150,7 +147,134 @@ function activate(context) {
             editBuilder.replace(entireRange, action.text || "");
           });
           break;
+        case "delete_selected_text":
+          if (!editor || !selection) {
+            vscode.window.showErrorMessage("[pyxend] Cannot delete: no selection.");
+            return;
+          }
+          editor.edit(editBuilder => {
+            editBuilder.delete(selection);
+          });
+          break;
 
+        case "insert_text":
+          if (!editor || !document) return;
+          let insertPos;
+          if (action.preset === "start") {
+            insertPos = new vscode.Position(0, 0);
+          } else if (action.preset === "end") {
+            const lastLine = document.lineCount - 1;
+            insertPos = new vscode.Position(lastLine, document.lineAt(lastLine).text.length);
+          } else if (action.preset === "cursor") {
+            insertPos = editor.selection.active;
+          } else if (typeof action.line === "number" && typeof action.character === "number") {
+            insertPos = new vscode.Position(action.line, action.character);
+          } else {
+            vscode.window.showErrorMessage("[pyxend] Invalid insert_text_at position.");
+            return;
+          }
+          editor.edit(editBuilder => {
+            editBuilder.insert(insertPos, action.text || "");
+          });
+          break;
+
+        case "replace_text":
+          if (!editor || !document) {
+            vscode.window.showErrorMessage("[pyxend] Cannot replace text: missing editor or document.");
+            return;
+          }
+
+          let replaceRange;
+
+          if (action.preset === "all") {
+            replaceRange = new vscode.Range(
+              document.positionAt(0),
+              document.positionAt(document.getText().length)
+            );
+          } else if (action.preset === "selected") {
+            if (!selection || selection.isEmpty) {
+              vscode.window.showErrorMessage("[pyxend] Cannot replace selected text: no selection.");
+              return;
+            }
+            replaceRange = new vscode.Range(selection.start, selection.end);
+          } else if (
+            action.start &&
+            action.end &&
+            typeof action.start.line === "number" &&
+            typeof action.start.character === "number" &&
+            typeof action.end.line === "number" &&
+            typeof action.end.character === "number"
+          ) {
+            replaceRange = new vscode.Range(
+              new vscode.Position(action.start.line, action.start.character),
+              new vscode.Position(action.end.line, action.end.character)
+            );
+          } else {
+            vscode.window.showErrorMessage("[pyxend] Invalid range or preset for replace_text.");
+            return;
+          }
+
+          editor.edit(editBuilder => {
+            editBuilder.replace(replaceRange, action.text || "");
+          });
+          break;
+
+        case "delete_file":
+          if (!filePath || !fs.existsSync(filePath)) {
+            vscode.window.showErrorMessage("[pyxend] Cannot delete file: not found.");
+            return;
+          }
+          fs.unlinkSync(filePath);
+          vscode.window.showInformationMessage(`[pyxend] File deleted: ${filePath}`);
+          break;
+
+        case "select_range":
+          if (!editor || typeof action.start.line !== "number" || typeof action.start.character !== "number"
+            || typeof action.end.line !== "number" || typeof action.end.character !== "number") {
+            vscode.window.showErrorMessage("[pyxend] Invalid selection range.");
+            return;
+          }
+          const start = new vscode.Position(action.start.line, action.start.character);
+          const end = new vscode.Position(action.end.line, action.end.character);
+          editor.selection = new vscode.Selection(start, end);
+          editor.revealRange(new vscode.Range(start, end));
+          break;
+
+        case "open_terminal":
+          vscode.window.createTerminal(action.name || "pyxend").show();
+          break;
+
+        case "run_terminal":
+          {
+            const name = action.name || "pyxend";
+            let terminal = vscode.window.terminals.find(t => t.name === name);
+            if (!terminal) terminal = vscode.window.createTerminal(name);
+            terminal.show();
+            terminal.sendText(action.command || "");
+          }
+          break;
+
+        case "close_terminal":
+          {
+            const name = action.name || "pyxend";
+            const terminal = vscode.window.terminals.find(t => t.name === name);
+            if (terminal) terminal.dispose();
+          }
+          break;
+
+        case "switch_to_file":
+          if (!action.path || !fs.existsSync(action.path)) {
+            vscode.window.showErrorMessage("[pyxend] Cannot switch: file not found.");
+            return;
+          }
+          vscode.workspace.openTextDocument(action.path).then(doc => {
+            vscode.window.showTextDocument(doc);
+          });
+          break;
+
+        case "reload_editor":
+          vscode.commands.executeCommand("workbench.action.reloadWindow");
+          break;
         default:
           vscode.window.showWarningMessage("[pyxend] Unknown action: " + action.action);
       }
@@ -171,8 +295,24 @@ function activate(context) {
       runPythonCommand('insert_here');
     }),
     
-    vscode.commands.registerCommand("pyxendtest.open_this_file", () => {
-      runPythonCommand('open_this_file');
+    vscode.commands.registerCommand("pyxendtest.insert_start", () => {
+      runPythonCommand('insert_start');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.insert_end", () => {
+      runPythonCommand('insert_end');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.replace_all", () => {
+      runPythonCommand('replace_all');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.replace_custom", () => {
+      runPythonCommand('replace_custom');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.open_file", () => {
+      runPythonCommand('open_file');
     }),
     
     vscode.commands.registerCommand("pyxendtest.move_cursor", () => {
@@ -183,12 +323,16 @@ function activate(context) {
       runPythonCommand('save_now');
     }),
     
-    vscode.commands.registerCommand("pyxendtest.overwrite_file", () => {
-      runPythonCommand('overwrite_file');
+    vscode.commands.registerCommand("pyxendtest.run_terminal", () => {
+      runPythonCommand('run_terminal');
     }),
     
-    vscode.commands.registerCommand("pyxendtest.terminal_demo", () => {
-      runPythonCommand('terminal_demo');
+    vscode.commands.registerCommand("pyxendtest.delete_text", () => {
+      runPythonCommand('delete_text');
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.delete_file", () => {
+      runPythonCommand('delete_file');
     }),
     
   );

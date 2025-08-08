@@ -1,17 +1,22 @@
 {
   "name": "pyxend-test",
   "displayName": "pyxend-test",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "main": "extension.js",
   "activationEvents": [
     "onCommand:pyxendtest.show_context",
     "onCommand:pyxendtest.replace_selection",
     "onCommand:pyxendtest.insert_here",
-    "onCommand:pyxendtest.open_this_file",
+    "onCommand:pyxendtest.insert_start",
+    "onCommand:pyxendtest.insert_end",
+    "onCommand:pyxendtest.replace_all",
+    "onCommand:pyxendtest.replace_custom",
+    "onCommand:pyxendtest.open_file",
     "onCommand:pyxendtest.move_cursor",
     "onCommand:pyxendtest.save_now",
-    "onCommand:pyxendtest.overwrite_file",
-    "onCommand:pyxendtest.terminal_demo"
+    "onCommand:pyxendtest.run_terminal",
+    "onCommand:pyxendtest.delete_text",
+    "onCommand:pyxendtest.delete_file"
   ],
   "contributes": {
     "commands": [
@@ -28,24 +33,44 @@
         "title": "Insert text after cursor"
       },
       {
-        "command": "pyxendtest.open_this_file",
-        "title": "Reopen same file"
+        "command": "pyxendtest.insert_start",
+        "title": "Insert at start"
+      },
+      {
+        "command": "pyxendtest.insert_end",
+        "title": "Insert at end"
+      },
+      {
+        "command": "pyxendtest.replace_all",
+        "title": "Replace entire file"
+      },
+      {
+        "command": "pyxendtest.replace_custom",
+        "title": "Replace custom range"
+      },
+      {
+        "command": "pyxendtest.open_file",
+        "title": "Open file"
       },
       {
         "command": "pyxendtest.move_cursor",
-        "title": "Move cursor to line 0 char 0"
+        "title": "Move cursor start file"
       },
       {
         "command": "pyxendtest.save_now",
         "title": "Save current file"
       },
       {
-        "command": "pyxendtest.overwrite_file",
-        "title": "Overwrite whole file"
+        "command": "pyxendtest.run_terminal",
+        "title": "Run echo in terminal"
       },
       {
-        "command": "pyxendtest.terminal_demo",
-        "title": "Run echo in terminal"
+        "command": "pyxendtest.delete_text",
+        "title": "Delete selected text"
+      },
+      {
+        "command": "pyxendtest.delete_file",
+        "title": "Delete current file"
       }
     ]
   },
