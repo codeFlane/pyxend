@@ -31,10 +31,26 @@ class InsertTextPreset(Enum):
 class ReplaceTextPreset(Enum):
     """
     Enum for predefined positions to replace text.
+    ### Values:
+     - **SELECTED:** Replace currently selected text
+     - **CUSTOM:** Replace text at custom position. Requires `line` and `character` provided in argumnets
+     - **ALL:** Replace all text (overwrite)
     """
     SELECTED = 'selected'
     CUSTOM = 'custom'
     ALL = 'all'
+
+class Event(Enum):
+    """
+    Enum of events
+    ### Values:
+     - **STARTUP:** Extension startup/activate event
+     - **CHANGE:** File change event
+     - **SHUTDOWN:** Extension shutdown/deactivate event
+    """
+    STARTUP = 'startup'
+    CHANGE = 'change'
+    SHUTDOWN = 'shutdown'
 
 
 class Extension:
@@ -56,7 +72,7 @@ class Extension:
     def __init__(self) -> None:
         """Init your extension"""
         self.commands = {}
-        self.step = 0
+        self.events = {}
         self.actions = []
 
     def command(self, name: str, title: str | None = None):
@@ -79,19 +95,44 @@ class Extension:
 
         ### Context:
         on function execute, pyxend add context to arguments.  
-        Now it contains selected_text, language, cursor_pos, file_path, all_text
         #### Example:
         ```python
         @ext.command('getContext')
         def get_context(context):
             print(context)
         ```
-        -> `{'selected_text': 'hello', 'language': 'text', 'cursor_pos': {'line': 1, 'character': 4}, 'file_path': ...}`
-        You can see full documentation about context in README.md (pyxend -> Extension API -> Command decorator -> Context)
+        -> `{'selected_text': 'hello', 'language': 'text', 'cursor_pos': {'line': 1, 'character': 4},  ...}`
+        You can see full documentation about context in `README.md` (pyxend -> Extension API -> Command decorator -> Context)
         """
         def decorator(fn):
             """Decorator for command"""
             self.commands[name] = fn
+            return fn
+        return decorator
+
+    def event(self, event: Event):
+        """Event decorator  
+        ### Using:
+        ```python
+        from pyxend import Extension, Event
+
+        ext = Extension()
+        @ext.event(Event.STARTUP)
+        def COMMAND_NAME(context):
+            #your code here
+            pass
+        ext.run()
+        ```
+
+        ### Args:
+            **event (Event):** event event.
+
+        ### Context:
+        See context documentation in `command` decorator or in `README.md` file
+        """
+        def decorator(fn):
+            """Decorator for command"""
+            self.events[event] = fn
             return fn
         return decorator
 
@@ -126,7 +167,7 @@ class Extension:
 
         ### Args:
             **text (str):** text to replace
-            **preset (ReplaceTextPreset):** position preset (start / custom / cursor / end). Defaults to CUSTOM
+            **preset (ReplaceTextPreset):** position preset (selected / custom / all). Defaults to CUSTOM
             **start_line (int):** start line number to replace text. Requires only when preset is CUSTOM. Default to 0
             **start_character (int):** start character number to replace text. Requires only when preset is CUSTOM. Default to 0
             **end_line (int):** end line number to replace text. Requires only when preset is CUSTOM. Default to 0
@@ -190,25 +231,38 @@ class Extension:
 
     def run(self) -> None:
         """Run your extension  
-        If you want to test extension, execute as `python main.py COMMAND_NAME CONTEXT`
+        If you want to test extension, execute as `python main.py command COMMAND_NAME CONTEXT` or `python main.py event EVENT_NAME CONTEXT`
         """
         args = sys.argv[1:]
-        if not args:
-            print(dumps({"error": "Missing command"}))
-            return
-        if len(args) < 2:
+        if len(args) < 3:
             print(dumps({"error": "Missing context"}))
             return
 
-        command = args[0]
-        if command in self.commands:
-            try:
-                context = loads(args[1])
-            except Exception as e:
-                print(dumps({"error": f"Invalid JSON context: {str(e)}"}))
-                return
-            self.commands[command](context)
-            print(dumps(self.actions))
-            self.actions.clear()
+        if args[0] == 'command':
+            command = args[1]
+            if command in self.commands:
+                try:
+                    context = loads(args[2])
+                except Exception as e:
+                    print(dumps({"error": f"Invalid JSON context: {str(e)}"}))
+                    return
+                self.commands[command](context)
+                print(dumps(self.actions))
+                self.actions.clear()
+            else:
+                print(dumps([])) #no actions
+        elif args[0] == 'event':
+            event = args[1]
+            if event in self.events:
+                try:
+                    context = loads(args[2])
+                except Exception as e:
+                    print(dumps({"error": f"Invalid JSON context: {str(e)}"}))
+                    return
+                self.events[event](context)
+                print(dumps(self.actions))
+                self.actions.clear()
+            else:
+                print(dumps([])) #no actions
         else:
-            print(dumps({"error": "Unknown command"}))
+            print(dumps({"error": "Unknown kind"}))

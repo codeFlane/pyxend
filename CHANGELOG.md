@@ -1,5 +1,14 @@
 # 📄 Changelog
 
+## 0.3.0 *Events*
+ - Removed `step` from Extension (used in alpha versions)
+ - Added `event` decorator
+ - Added `Event` enum with `startup`, `change`, `shutdown` values
+ - Updated JS template
+ - Removed context values from `command` decorator (full list of context values in `README.md`)
+ - Fixed position preset docstring in `replace_text` method
+ - Added values docstring in `ReplaceTextPreset`
+
 ## 0.2.0 *New actions*
  - Added `opened_files`, `is_saved` and `workspace` in context.
  - `replace_selected_text` and `overwrite_file` JS actions are now **deprecated**. Use `replace_text` with presets instead.
@@ -36,5 +45,5 @@
  - Added file existence check in `open_file` (shows error if path is invalid or file not found).
  - Updated readme file
 
-## 0.1.1 *Initial*
+## 0.1.0 *Initial*
 Initial version
