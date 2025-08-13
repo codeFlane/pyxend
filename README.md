@@ -147,7 +147,10 @@ When the command is invoked, it receives a `context` dictionary with useful meta
   "all_text": "Hello World", // File content
   "cursor_word": "Hello", // the word under the cursor
   "lines": 3, // Lines count in file
-  "file_size": 12 // File size in bytes
+  "file_size": 12, // File size in bytes
+  "opened_files": ["D:/projects/example.py", "D:/test.txt"], // Currently opened files
+  "is_saved": false, //Is file saved
+  "workspace": "D:/projects" //Opened workspace folder
 }
 ```
 
@@ -158,8 +161,27 @@ When the command is invoked, it receives a `context` dictionary with useful meta
 def say_hello(context):
     ext.show_modal(f"Hi! You selected: {context['selected_text']}")
 ```
-
 ---
+
+### Event decorator
+Decorator to register an event that can be invoked from VS Code.
+
+#### Arguments:
+
+* `event` - Event type (`Event` enum).
+
+#### Context:
+Context same as `Command decorator`. See pyxend -> Extension API -> Command decorator -> Context
+
+#### Example:
+
+```python
+@ext.command("sayHello", title="Say Hello")
+def say_hello(context):
+    ext.show_modal(f"Hi! You selected: {context['selected_text']}")
+```
+---
+
 ### Show modal
 Show modal popup
 

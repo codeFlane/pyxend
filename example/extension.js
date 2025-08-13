@@ -288,17 +288,6 @@ function runPython(kind /* 'command' | 'event' */, name) {
         break;
       }
 
-      case "switch_to_file": {
-        if (!action.path || !fs.existsSync(action.path)) {
-          vscode.window.showErrorMessage("[pyxend] Cannot switch: file not found.");
-          return;
-        }
-        vscode.workspace.openTextDocument(action.path).then(doc => {
-          vscode.window.showTextDocument(doc);
-        });
-        break;
-      }
-
       case "reload_editor": {
         vscode.commands.executeCommand("workbench.action.reloadWindow");
         break;
@@ -377,6 +366,14 @@ function activate(context) {
     
     vscode.commands.registerCommand("pyxendtest.delete_file", () => {
       runPython("command", "delete_file");
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.select_range", () => {
+      runPython("command", "select_range");
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.reload_editor", () => {
+      runPython("command", "reload_editor");
     }),
     
   );

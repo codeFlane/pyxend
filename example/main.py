@@ -76,6 +76,15 @@ def delete_text(context):
 def delete_file(context):
     ext.delete_file()
 
+@ext.command('select_range', 'Select range')
+def select_range(context):
+    ext.select_range(0, 1, 0, 5)
+
+@ext.command('reload_editor', 'Reload editor')
+def reload_editor(context):
+    ext.reload_editor()
+
+
 @ext.event(Event.STARTUP)
 def startup(context):
     ext.show_modal('extension startup')

@@ -227,6 +227,24 @@ class Extension:
         """Delete currently opened file. Do not recommend to use"""
         self.actions.append({"action": "delete_file"})
 
+    def select_range(self, start_line: int, start_character: int, end_line: int, end_character: int):
+        """Select range at custom position
+
+        ### Args:
+            **start_line (int):** start line number to select.
+            **start_character (int):** start character number to select.
+            **end_line (int):** end line number to select.
+            **end_character (int):** end character number to select.
+        """
+        self.actions.append({'action': 'select_range',
+            'start': {'line': start_line, 'character': start_character},
+            'end': {'line': end_line, 'character': end_character}
+        })
+
+    def reload_editor(self):
+        """reload editor"""
+        self.actions.append({'action': 'reload_editor'})
+
     #TODO: more functions from JS
 
     def run(self) -> None:

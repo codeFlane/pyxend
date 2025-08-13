@@ -19,7 +19,9 @@
     "onCommand:pyxendtest.save_now",
     "onCommand:pyxendtest.run_terminal",
     "onCommand:pyxendtest.delete_text",
-    "onCommand:pyxendtest.delete_file"
+    "onCommand:pyxendtest.delete_file",
+    "onCommand:pyxendtest.select_range",
+    "onCommand:pyxendtest.reload_editor"
   ],
   "contributes": {
     "commands": [
@@ -86,6 +88,14 @@
       {
         "command": "pyxendtest.delete_file",
         "title": "Delete file"
+      },
+      {
+        "command": "pyxendtest.select_range",
+        "title": "Select range"
+      },
+      {
+        "command": "pyxendtest.reload_editor",
+        "title": "Reload editor"
       }
     ]
   },

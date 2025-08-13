@@ -1,6 +1,8 @@
 # 📄 Changelog
 
 ## 0.3.0 *Events*
+ - Added `select_range` and `reload_editor` actions in Extension class
+ - Removed `switch_to_file` from JS actions because it duplicates `open_file` action
  - Removed `step` from Extension (used in alpha versions)
  - Added `event` decorator
  - Added `Event` enum with `startup`, `change`, `shutdown` values
@@ -8,6 +10,7 @@
  - Removed context values from `command` decorator (full list of context values in `README.md`)
  - Fixed position preset docstring in `replace_text` method
  - Added values docstring in `ReplaceTextPreset`
+ - Added `opened_files`, `is_saved` and `workspace` context values in readme
 
 ## 0.2.0 *New actions*
  - Added `opened_files`, `is_saved` and `workspace` in context.
