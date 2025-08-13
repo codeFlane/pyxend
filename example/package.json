@@ -1,10 +1,13 @@
 {
   "name": "pyxend-test",
   "displayName": "pyxend-test",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "extension.js",
   "activationEvents": [
     "onCommand:pyxendtest.show_context",
+    "onCommand:pyxendtest.show_info_modal",
+    "onCommand:pyxendtest.show_warn_modal",
+    "onCommand:pyxendtest.show_error_modal",
     "onCommand:pyxendtest.replace_selection",
     "onCommand:pyxendtest.insert_here",
     "onCommand:pyxendtest.insert_start",
@@ -22,7 +25,19 @@
     "commands": [
       {
         "command": "pyxendtest.show_context",
-        "title": "Show context data"
+        "title": "Show context"
+      },
+      {
+        "command": "pyxendtest.show_info_modal",
+        "title": "Show info modal"
+      },
+      {
+        "command": "pyxendtest.show_warn_modal",
+        "title": "Show warn modal"
+      },
+      {
+        "command": "pyxendtest.show_error_modal",
+        "title": "Show error modal"
       },
       {
         "command": "pyxendtest.replace_selection",
@@ -42,11 +57,11 @@
       },
       {
         "command": "pyxendtest.replace_all",
-        "title": "Replace entire file"
+        "title": "Replace all text"
       },
       {
         "command": "pyxendtest.replace_custom",
-        "title": "Replace custom range"
+        "title": "Replace at custom pos"
       },
       {
         "command": "pyxendtest.open_file",
@@ -54,15 +69,15 @@
       },
       {
         "command": "pyxendtest.move_cursor",
-        "title": "Move cursor start file"
+        "title": "Set cursor pos"
       },
       {
         "command": "pyxendtest.save_now",
-        "title": "Save current file"
+        "title": "Save file"
       },
       {
         "command": "pyxendtest.run_terminal",
-        "title": "Run echo in terminal"
+        "title": "Run terminal"
       },
       {
         "command": "pyxendtest.delete_text",
@@ -70,7 +85,7 @@
       },
       {
         "command": "pyxendtest.delete_file",
-        "title": "Delete current file"
+        "title": "Delete file"
       }
     ]
   },

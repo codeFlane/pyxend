@@ -1,8 +1,8 @@
-from pyxend import Extension, ModalType, InsertTextPreset, ReplaceTextPreset
+from pyxend import Extension, ModalType, InsertTextPreset, ReplaceTextPreset, Event
 
 ext = Extension()
 
-@ext.command("show_context", "Show context data")
+@ext.command("show_context", "Show context")
 def show_context(context):
     msg = (f"File: {context['file_path']}"
         f"Language: {context['language']}"
@@ -16,55 +16,76 @@ def show_context(context):
         f"Workspace folder: {context['workspace']}")
     ext.show_modal(msg, type=ModalType.INFO)
 
+@ext.command('show_info_modal', 'Show info modal')
+def show_info_moadl(context):
+    ext.show_modal('Info modal')
+
+@ext.command('show_warn_modal', 'Show warn modal')
+def show_warn_moadl(context):
+    ext.show_modal('Warn modal', type=ModalType.WARNING)
+
+@ext.command('show_error_modal', 'Show error modal')
+def show_error_moadl(context):
+    ext.show_modal('Error modal', type=ModalType.ERROR)
+
 @ext.command("replace_selection", "Replace selected text")
 def replace_selection(context):
-    ext.replace_text("✅ This text replaced your selection.", preset=ReplaceTextPreset.SELECTED)
+    ext.replace_text("Replace selected text", preset=ReplaceTextPreset.SELECTED)
 
 @ext.command("insert_here", "Insert text after cursor")
 def insert_here(context):
-    ext.insert_text("🚀 Inserted from pyxend", preset=InsertTextPreset.CURSOR)
+    ext.insert_text("Insert after cursor", preset=InsertTextPreset.CURSOR)
 
 @ext.command("insert_start", "Insert at start")
 def insert_start(context):
-    ext.insert_text("🔝 Top of file\n", preset=InsertTextPreset.START)
+    ext.insert_text("Insert at start file", preset=InsertTextPreset.START)
 
 @ext.command("insert_end", "Insert at end")
 def insert_end(context):
-    ext.insert_text("\n🔚 Bottom of file", preset=InsertTextPreset.END)
+    ext.insert_text("Insert at end file", preset=InsertTextPreset.END)
 
-@ext.command("replace_all", "Replace entire file")
+@ext.command("replace_all", "Replace all text")
 def replace_all(context):
-    ext.replace_text("💣 This file was overwritten by pyxend.", preset=ReplaceTextPreset.ALL)
+    ext.replace_text("Replace all text", preset=ReplaceTextPreset.ALL)
 
-@ext.command("replace_custom", "Replace custom range")
+@ext.command("replace_custom", "Replace at custom pos")
 def replace_custom(context):
-    ext.replace_text("🧪 Replaced in range", preset=ReplaceTextPreset.CUSTOM,
-                     start_line=0, start_character=0,
-                     end_line=0, end_character=5)
+    ext.replace_text("Replaced at custom position", preset=ReplaceTextPreset.CUSTOM, start_line=0, start_character=0, end_line=0, end_character=5)
 
 @ext.command("open_file", "Open file")
 def open_file(context):
     ext.open_file(r"D:\projects\pyxend\README.md")
 
-@ext.command("move_cursor", "Move cursor start file")
+@ext.command("move_cursor", "Set cursor pos")
 def move_cursor(context):
     ext.set_cursor_pos(0, 0)
 
-@ext.command("save_now", "Save current file")
+@ext.command("save_now", "Save file")
 def save_now(context):
     ext.save_file()
-    ext.show_modal("File saved!", ModalType.INFO)
 
-@ext.command("run_terminal", "Run echo in terminal")
+@ext.command("run_terminal", "Run terminal")
 def run_terminal(context):
-    ext.run_terminal_command("echo Hello from pyxend!")
+    ext.run_terminal_command("echo Hello")
 
 @ext.command("delete_text", "Delete selected text")
 def delete_text(context):
     ext.delete_selected_text()
 
-@ext.command("delete_file", "Delete current file")
+@ext.command("delete_file", "Delete file")
 def delete_file(context):
     ext.delete_file()
+
+@ext.event(Event.STARTUP)
+def startup(context):
+    ext.show_modal('extension startup')
+
+@ext.event(Event.CHANGE)
+def change(context):
+    ext.show_modal('file changed')
+
+@ext.event(Event.SHUTDOWN)
+def shutdown(context):
+    ext.show_modal('extension shutdown')
 
 ext.run()
