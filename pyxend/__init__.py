@@ -132,7 +132,7 @@ class Extension:
         """
         def decorator(fn):
             """Decorator for command"""
-            self.events[event] = fn
+            self.events[event.value] = fn
             return fn
         return decorator
 
