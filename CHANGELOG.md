@@ -1,5 +1,9 @@
 # 📄 Changelog
 
+## 0.3.1 *Status message*
+ - Added `status_message` action
+ - Added `__version__` in `__init__.py`
+
 ## 0.3.0 *Events*
  - Added `select_range` and `reload_editor` actions in Extension class
  - Removed `switch_to_file` from JS actions because it duplicates `open_file` action

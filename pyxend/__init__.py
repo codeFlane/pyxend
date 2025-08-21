@@ -2,6 +2,8 @@ import sys
 from json import loads, dumps
 from enum import Enum
 
+__version__ = '0.3.1'
+
 class ModalType(Enum):
     r"""
     Enum for modal popup types.
@@ -245,7 +247,14 @@ class Extension:
         """reload editor"""
         self.actions.append({'action': 'reload_editor'})
 
-    #TODO: more functions from JS
+    def status_message(self, message: str, timeout: int = 3000):
+        """_summary_
+
+        ### Args:
+            **message (str):** The message to show.
+            **timeout (int, optional):** How long message will show in ms. Defaults to 3000.
+        """
+        self.actions.append({'action': 'status_message', 'message': message, 'timeout': timeout})
 
     def run(self) -> None:
         """Run your extension  

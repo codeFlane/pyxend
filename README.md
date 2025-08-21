@@ -142,7 +142,7 @@ When the command is invoked, it receives a `context` dictionary with useful meta
 {
   "selected_text": "Hello", // Currently selected text
   "language": "python", // Opened file language
-  "cursor_pos": {"line": 3, "character": 15}, // CUrrent cursor position
+  "cursor_pos": {"line": 3, "character": 15}, // Current cursor position
   "file_path": "D:/projects/example.py", // Opened file path
   "all_text": "Hello World", // File content
   "cursor_word": "Hello", // the word under the cursor
@@ -194,7 +194,7 @@ Show modal popup
 
 #### Example:
 ```python
-ext.show_modal("This is an error", type=ModalType.error) #Show error modal with text "This is an error"
+ext.show_modal("This is an error", type=ModalType.ERROR) #Show error modal with text "This is an error"
 ```
 
 ---
@@ -326,6 +326,21 @@ Delete currently opened file (Do not recommend to use)
 ```python
 ext.delete_file() #delete file
 ```
+
+---
+### Status message
+Show status message in a bottom of screen.
+
+#### Arguments:
+* `message` - The message to show.
+* `timeout` (optional) - How long message will show in ms. Defaults to 3000ms (3s)
+
+#### Example:
+```python
+ext.status_message("Hello from pyxend", 1000) #show status message "Hello from pyxend" for 1 second
+```
+
+---
 ## ⚠️ Important Notes about Command Execution
 
 * All actions (`ext.show_modal`, `ext.insert_text`, etc.) are collected into a list during Python execution and **returned as a single JSON batch** to VS Code.
@@ -348,8 +363,7 @@ This will result in **both modals appearing immediately**, one after the other �
 
 We are planning to add **streaming or asynchronous action execution** in a future version (`v1.0` or `v2.0`) so that:
 
-* actions like `ext.show_modal()` can be executed live, one at a time,
-* and delays or dynamic logic will reflect in real-time in the editor.
+actions like `ext.show_modal()` can be executed live, one at a time, and delays or dynamic logic will reflect in real-time in the editor.
 
 We already have some ideas on how to implement this — stay tuned!
 
@@ -367,8 +381,8 @@ When a command is executed:
 
    * Receives the command and context.
    * Executes the matching `@ext.command(...)` function.
-   * Inside the function, you use methods like `ext.show_modal(...)`, `ext.insert_text(...)`, etc.
-   * These generate a list of *actions*, returned to the JS.
+   * Generates actions list from executed commands.
+   * Return actions list to the JS.
 
 3. **VS Code (JavaScript)**
 
@@ -410,12 +424,29 @@ case "highlight_range":
 ```
 
 This allows `pyxend` to be fully extensible.
+> Note: after syncing (`pyxend sync`), all JS will overwrite. It will be fixed in future versions.
 
 ## 📄 Changelog
 See full change log in [CHANGELOG.md](./CHANGELOG.md)
 
-### 0.1.2 (Latest)
+### 0.3.0 (Latest)
+Added events and 2 new actions
+
+### 0.2.0
+Added 2 new actions and reworked replace/insert text methods
+
+### 0.1.2
 Added 3 new values in context, renamed `manifest` → `metadata`
 
 ### 0.1.1
 Fixed packaging bug, improved error modals, typo fixes
+
+## ⭐ Contributing
+Thank you for checking out pyxend!
+If you find it useful, please consider:
+
+ - ⭐ Starring the GitHub repository — it really helps the project grow.
+ - 🛠 Opening an issue or PR with your suggestions or improvements.
+ - 📢 Sharing the project with fellow Python developers who want to build VS Code extensions without touching JavaScript.
+
+> Let’s make Python-powered VS Code extensions mainstream!

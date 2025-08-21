@@ -1,7 +1,7 @@
 {
   "name": "pyxend-test",
   "displayName": "pyxend-test",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "extension.js",
   "activationEvents": [
     "onCommand:pyxendtest.show_context",
@@ -21,7 +21,8 @@
     "onCommand:pyxendtest.delete_text",
     "onCommand:pyxendtest.delete_file",
     "onCommand:pyxendtest.select_range",
-    "onCommand:pyxendtest.reload_editor"
+    "onCommand:pyxendtest.reload_editor",
+    "onCommand:pyxendtest.status_message"
   ],
   "contributes": {
     "commands": [
@@ -96,6 +97,10 @@
       {
         "command": "pyxendtest.reload_editor",
         "title": "Reload editor"
+      },
+      {
+        "command": "pyxendtest.status_message",
+        "title": "Show status message"
       }
     ]
   },

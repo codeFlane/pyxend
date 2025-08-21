@@ -129,6 +129,16 @@ def build(target):
             print(f'Build completed. Install package using "code --install-extension {filename}"')
         else:
             print("Build succeeded but could not find .vsix output.")
+    else:
+        print('Error while building extension. See details above.')
+
+# @cli.command()
+# @click.option('-t', '--target', default='.')
+# @click.argument('name')
+# def custom_action(target, name):
+#     """Create custom actions JS file"""
+#     project_dir = Path(target).resolve()
+    
 
 if __name__ == "__main__":
     cli()

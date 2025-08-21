@@ -84,6 +84,9 @@ def select_range(context):
 def reload_editor(context):
     ext.reload_editor()
 
+@ext.command('status_message', 'Show status message')
+def status_message(context):
+    ext.status_message('Hello from Pyxend!')
 
 @ext.event(Event.STARTUP)
 def startup(context):

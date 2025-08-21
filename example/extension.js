@@ -293,6 +293,10 @@ function runPython(kind /* 'command' | 'event' */, name) {
         break;
       }
 
+      case "status_message":
+        vscode.window.setStatusBarMessage(action.message || "pyxend", action.timeout || 3000);
+        break;
+
       default:
         vscode.window.showWarningMessage("[pyxend] Unknown action: " + action.action);
     }
@@ -374,6 +378,10 @@ function activate(context) {
     
     vscode.commands.registerCommand("pyxendtest.reload_editor", () => {
       runPython("command", "reload_editor");
+    }),
+    
+    vscode.commands.registerCommand("pyxendtest.status_message", () => {
+      runPython("command", "status_message");
     }),
     
   );
